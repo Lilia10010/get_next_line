@@ -10,7 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+
 #include <fcntl.h>    // open()
 #include <unistd.h>   // read(), write(), close()
 #include <stdio.h>    // colocar a minha printf()
 #include <stdlib.h>   // malloc(), free()
+
+
+
+
+
+char	*get_next_line(int fd);
+char	*strjoin(char *s1, char *s2);
+
+# endif
