@@ -14,7 +14,9 @@
 
 #include <string.h> 
 
-static char *test_strjoin(const char *s1, const char *s2)
+char *test_strjoin(const char *s1, const char *s2);
+
+char *test_strjoin(const char *s1, const char *s2)
 {
     char *result;
     size_t len1;
@@ -34,37 +36,20 @@ static char *test_strjoin(const char *s1, const char *s2)
     return (result);
 }
 
-
-/*  char	*get_next_line(int fd)
- {
-	char	*line;
-	char	*buffer;
-	int		bytes_read;
-
-	line = NULL;
-
-	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!buffer)
-		return (NULL);
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	if (bytes_read == -1)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	buffer[bytes_read] = '\0';
-	line = test_strjoin(line, buffer);
-	free(buffer);
-	return (line);
- } */
-
  char *get_next_line(int fd)
 {
     static char *remainder;
     char *buffer;
-    char *newline_pos;
     char *line;
+    char *temp;
+    char *newline_pos;
     int bytes_read;
+    int count_remainder = 0;
+
+     /* printf("BUFFER_SIZE ==>: %d\n", BUFFER_SIZE); */
+
+    if(fd < 0 || BUFFER_SIZE <= 0)
+        return (NULL);
 
     buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (!buffer)
@@ -76,19 +61,45 @@ static char *test_strjoin(const char *s1, const char *s2)
     while ((bytes_read = read(fd, buffer, BUFFER_SIZE)) > 0)
     {
         buffer[bytes_read] = '\0';
-        remainder = test_strjoin(remainder, buffer);
+        temp = test_strjoin(remainder, buffer);
+        printf("Remainder%i => %s\n", count_remainder, remainder);
+        count_remainder += 1;
+        free(remainder);
+        remainder = temp;
+
+        //verificar se com o if esta lidando apenas com a primeira ocorrecia de \n 
         if ((newline_pos = strchr(remainder, '\n')))
         {
             *newline_pos = '\0';
             line = strdup(remainder);
-            remainder = strdup(newline_pos + 1);
+
+            printf("Remainder%i => %s\n", count_remainder, remainder);
+            count_remainder += 1;
+
+
+            temp = strdup(newline_pos + 1);
+            free(remainder);
+            remainder = temp;
             free(buffer);
             return (line);
         }
+
+        /*  while ((newline_pos = strchr(remainder, '\n')))
+        {
+            *newline_pos = '\0';
+            line = strdup(remainder);
+            temp = strdup(newline_pos + 1);
+             printf("Remainder%i => %s\n", count_remainder, remainder);
+            count_remainder += 1;
+            free(remainder);
+            remainder = temp;
+            free(buffer);
+            return (line);                
+        } */
     }
 
     free(buffer);
-    if (bytes_read == -1 || !*remainder)
+    if (bytes_read < 0 || !remainder || !*remainder)
     {
         free(remainder);
         remainder = NULL;

@@ -1,8 +1,7 @@
-#include "get_next_line.h"
-#include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
-
+#include "get_next_line.h" // get_next_line()
+#include <stdio.h>   // printf()
+#include <fcntl.h>    // open()
+#include <unistd.h>   // read(), write(), close()
 
 int main(void)
 {
@@ -19,7 +18,7 @@ int main(void)
     line = get_next_line(fd);
     while (line)
     {
-        printf("%s\n", line);
+        printf("%s", line);
         free(line);
         line = get_next_line(fd);
     }
@@ -29,4 +28,5 @@ int main(void)
 }
 
 /* gcc -o get_next_line main.c get_next_line.c -D BUFFER_SIZE=1024
+gcc -D BUFFER_SIZE=50 get_next_line.c -o gnl main.c
 ./get_next_line   */ 

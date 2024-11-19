@@ -15,19 +15,16 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 10
 # endif
 
-#include <fcntl.h>    // open()
-#include <unistd.h>   // read(), write(), close()
-#include <stdio.h>    // colocar a minha printf()
+
+#include <stdio.h>    //TIRAR DEPOIS ESQUECE NÃO CASSILDS
 #include <stdlib.h>   // malloc(), free()
-
-
-
+#include <unistd.h>   // read(), close()
 
 
 char	*get_next_line(int fd);
-char	*strjoin(char *s1, char *s2);
+char *test_strjoin(const char *s1, const char *s2);
 
 # endif
