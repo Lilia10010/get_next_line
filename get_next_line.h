@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 00:31:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2024/11/13 21:13:04 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2024/11/20 00:56:04 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 
 
 char	*get_next_line(int fd);
-char *test_strjoin(const char *s1, const char *s2);
+char	*ft_strjoin(const char *s1, const char *s2);
+size_t	ft_strlen(const char *str);
+char	*ft_strdup(const char *str);
 
 # endif

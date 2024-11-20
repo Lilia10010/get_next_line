@@ -1,17 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 20:53:38 by lpaula-n          #+#    #+#             */
-/*   Updated: 2024/11/20 00:51:55 by lpaula-n         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
+#include <stdio.h>
+#include <string.h>
 
+/* 
 size_t	ft_strlen(const char *str)
 {
 	size_t length;
@@ -28,14 +19,17 @@ char	*ft_strjoin(const char *s1, const char *s2)
 
     if (!s1 || !s2)
         return (NULL);
+
     join = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
     if (!join)
         return (NULL);
+
     len_s1 = -1;
     while (s1[++len_s1])
     {
         join[len_s1] = s1[len_s1];
-    }    
+    }
+        
     len_s2 = -1;
     while (s2[++len_s2])
     {
@@ -58,4 +52,18 @@ char	*ft_strdup(const char *str)
 		copy[length] = str[length];
 	copy[length] = '\0';
 	return (copy);
+}
+ */
+
+int main(void)
+{
+	char	*s1 = "hello";
+	char	*dest;
+
+	dest = ft_strdup(s1);
+	printf("duplicate = %s", dest);
+
+	free(dest);
+
+	return (0);
 }

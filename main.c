@@ -11,14 +11,14 @@ int main(void)
     fd = open("test.txt", O_RDONLY);
     if (fd == -1)
     {
-        perror("Error opening file");
+        printf("Error opening file");
         return (1);
     }
 
     line = get_next_line(fd);
     while (line)
     {
-        printf("%s", line);
+        printf("=>%s\n", line);
         free(line);
         line = get_next_line(fd);
     }
@@ -29,4 +29,7 @@ int main(void)
 
 /* gcc -o get_next_line main.c get_next_line.c -D BUFFER_SIZE=1024
 gcc -D BUFFER_SIZE=50 get_next_line.c -o gnl main.c
+
+cc main.c get_next_line.c get_next_line_utils.c -o test  
+
 ./get_next_line   */ 
