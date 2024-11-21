@@ -13,100 +13,92 @@
 #include "get_next_line.h"
 
 #include <string.h> 
-
-char *ft_strjoin(const char *s1, const char *s2);
-
-/* char *ft_strjoin(const char *s1, const char *s2)
+static char *handle_read_error(char *remainder)
 {
-    char *result;
-    size_t len1;
-    size_t len2;
+    free(remainder);
+    return (NULL);
+}
 
-	if (!s1 || !s2)
-		return (NULL);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	
-    result = malloc(len1 + len2 + 1);
-    if (!result)
+static char *read_file(int fd, char *buffer, char *remainder)
+{
+    int bytes_read;
+    char *temp;
+
+    bytes_read = 1;
+    if (!remainder)
+    {
+        remainder = ft_strdup("");
+        if (!remainder)
+            return (NULL);
+    }
+    while (!ft_strchr(remainder, '\n') && bytes_read != 0)
+    {
+        bytes_read = read(fd, buffer, BUFFER_SIZE);
+        if (bytes_read == -1)
+            return (handle_read_error(remainder));
+        buffer[bytes_read] = '\0';
+        temp = ft_strjoin(remainder, buffer);
+        free(remainder);
+        remainder = temp;
+
+        if (!remainder)
+            return (NULL);
+    }
+    return (remainder);
+}
+
+static char *get_line(char *remainder)
+{
+    int i;
+    char *line;
+
+    i = 0;
+    if (!remainder[i]) // if remainder estiver vazio, retorna NULoL
         return (NULL);
-    strcpy(result, s1);
-    strcat(result, s2);
-    return (result);
-} */
+    while (remainder[i] && remainder[i] != '\n')
+        i++;
+    // extrai a linha => se existir \n + 1 p/ inclui-lo, se não extrai apenas até i ;) 
+    if(remainder[i] == '\n')
+        line = ft_substr(remainder, 0, i + 1);
+    else
+        line = ft_substr(remainder, 0, i);
+    return (line);
+}
 
- char *get_next_line(int fd)
+static char *update_remainder(char *remainder)
+{
+    int i;
+    char *temp;
+
+    i = 0;
+    while (remainder[i] && remainder[i] != '\n')
+        i++;
+    if (!remainder[i]) // aqui é pra verificar a ausencia de =>'\n' ai libera o restante, ta ok viadinha
+        return (handle_read_error(remainder));
+    // atualiza o restante, ingnioriando a linha já processada
+    temp = ft_substr(remainder, i + 1, ft_strlen(remainder) - i);
+    free(remainder);
+
+    return (temp);
+}
+
+char *get_next_line(int fd)
 {
     static char *remainder;
     char *buffer;
     char *line;
-    char *temp;
-    char *newline_pos;
-    int bytes_read;
-     printf("aqui =======");
 
-
-    if(fd < 0 || BUFFER_SIZE <= 0)
+    if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
-
-    buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+    buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (!buffer)
         return (NULL);
-
-    if (!remainder)
-        remainder = ft_strdup("");
-
-      printf("aqui =======");
-
-    while ((bytes_read = read(fd, buffer, BUFFER_SIZE)) > 0)
-    {
-       /*  printf("\nbuffer %s ", buffer); */
-        buffer[bytes_read] = '\0';
-        temp = ft_strjoin(remainder, buffer);
-        /* printf("Remainder%i => %s\n", count_remainder, remainder);
-        count_remainder += 1; */
-
-        //verificar se com o if esta lidando apenas com a primeira ocorrecia de \n 
-        if ((newline_pos = strchr(remainder, '\n')))
-        {
-            *newline_pos = '\0';
-            line = ft_strdup(remainder);
-
-           /*  printf("Remainder%i => %s\n", count_remainder, remainder);
-            count_remainder += 1; */
-
-
-            temp = ft_strdup(newline_pos + 1);
-            free(remainder);
-            remainder = temp;
-            free(buffer);
-            return (line);
-        }
-
-        /*  while ((newline_pos = strchr(remainder, '\n')))
-        {
-            *newline_pos = '\0';
-            line = strdup(remainder);
-            temp = strdup(newline_pos + 1);
-             printf("Remainder%i => %s\n", count_remainder, remainder);
-            count_remainder += 1;
-            free(remainder);
-            remainder = temp;
-            free(buffer);
-            return (line);                
-        } */
-    }
-
+    remainder = read_file(fd, buffer, remainder);
     free(buffer);
-    if (bytes_read < 0 || !remainder || !*remainder)
-    {
-        free(remainder);
-        remainder = NULL;
+    if (!remainder) // if error ou EOF => fimmmmm
         return (NULL);
-    }
-
-    line = ft_strdup(remainder);
-    free(remainder);
-    remainder = NULL;
+    line = get_line(remainder);
+    remainder = update_remainder(remainder);
+   /*  printf("aqui line testing: %s\n", line); */
     return (line);
 }

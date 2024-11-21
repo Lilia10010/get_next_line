@@ -3,6 +3,7 @@
 #include <fcntl.h>    // open()
 #include <unistd.h>   // read(), write(), close()
 
+
 int main(void)
 {
     int fd;
@@ -16,13 +17,13 @@ int main(void)
     }
 
     line = get_next_line(fd);
-    while (line)
+  /*   while (line)
     {
         printf("=>%s\n", line);
         free(line);
         line = get_next_line(fd);
     }
-
+ */
     close(fd);
     return (0);
 }
