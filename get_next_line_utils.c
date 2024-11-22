@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:53:38 by lpaula-n          #+#    #+#             */
-/*   Updated: 2024/11/20 00:51:55 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2024/11/21 21:15:26 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*ft_strchr(const char *str, int c)
 
 size_t	ft_strlen(const char *str)
 {
-	size_t length;
+	size_t	length;
 
 	length = 0;
 	while (str[length] != '\0')
