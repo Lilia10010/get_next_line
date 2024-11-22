@@ -21,26 +21,26 @@ static char	*handle_read_error(char *remainder)
 static char	*read_file(int fd, char *buffer, char *remainder)
 {
 	int		bytes_read;
-	char	*temp;
+	size_t remainder_len;
 
 	bytes_read = 1;
-	if (!remainder)
-	{
-		remainder = ft_strdup("");
-		if (!remainder)
-			return (NULL);
-	}
+	if (remainder)
+		remainder_len = ft_strlen(remainder);
+	else 
+		remainder_len = 0;
+	
+	
 	while (!ft_strchr(remainder, '\n') && bytes_read != 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (handle_read_error(remainder));
 		buffer[bytes_read] = '\0';
-		temp = ft_strjoin(remainder, buffer);
-		free(remainder);
-		remainder = temp;
+		remainder = realloc(remainder, remainder_len + bytes_read + 1);
 		if (!remainder)
 			return (NULL);
+		ft_memcpy(remainder + remainder_len, buffer, bytes_read + 1);
+		remainder_len += bytes_read;
 	}
 	return (remainder);
 }
@@ -62,6 +62,7 @@ static char	*get_line(char *remainder)
 	return (line);
 }
 
+
 static char	*update_remainder(char *remainder)
 {
 	int		i;
@@ -80,16 +81,12 @@ static char	*update_remainder(char *remainder)
 char	*get_next_line(int fd)
 {
 	static char	*remainder;
-	char		*buffer;
+	static char buffer[BUFFER_SIZE + 1];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
-		return (NULL);
 	remainder = read_file(fd, buffer, remainder);
-	free(buffer);
 	if (!remainder)
 		return (NULL);
 	line = get_line(remainder);
