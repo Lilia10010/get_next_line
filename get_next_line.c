@@ -21,26 +21,26 @@ static char	*handle_read_error(char *remainder)
 static char	*read_file(int fd, char *buffer, char *remainder)
 {
 	int		bytes_read;
-	size_t remainder_len;
+	char	*temp;
 
 	bytes_read = 1;
-	if (remainder)
-		remainder_len = ft_strlen(remainder);
-	else 
-		remainder_len = 0;
-	
-	
+	if (!remainder)
+	{
+		remainder = ft_strdup("");
+		if (!remainder)
+			return (NULL);
+	}
 	while (!ft_strchr(remainder, '\n') && bytes_read != 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (handle_read_error(remainder));
 		buffer[bytes_read] = '\0';
-		remainder = realloc(remainder, remainder_len + bytes_read + 1);
+		temp = ft_strjoin(remainder, buffer);
+		free(remainder);
+		remainder = temp;
 		if (!remainder)
 			return (NULL);
-		ft_memcpy(remainder + remainder_len, buffer, bytes_read + 1);
-		remainder_len += bytes_read;
 	}
 	return (remainder);
 }
@@ -89,8 +89,8 @@ char	*get_next_line(int fd)
 	remainder = read_file(fd, buffer, remainder);
 	if (!remainder)
 		return (NULL);
+	 /*  printf("aqui line testing: %s\n", remainder);  */
 	line = get_line(remainder);
 	remainder = update_remainder(remainder);
-	/*  printf("aqui line testing: %s\n", line); */
 	return (line);
 }
