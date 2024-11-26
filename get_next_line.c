@@ -6,7 +6,7 @@
 /*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 00:31:30 by lpaula-n          #+#    #+#             */
-/*   Updated: 2024/11/21 20:54:44 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2024/11/25 21:46:44 by lpaula-n         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static char	*get_line(char *remainder)
 	return (line);
 }
 
-
 static char	*update_remainder(char *remainder)
 {
 	int		i;
@@ -81,7 +80,7 @@ static char	*update_remainder(char *remainder)
 char	*get_next_line(int fd)
 {
 	static char	*remainder;
-	static char buffer[BUFFER_SIZE + 1];
+	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -89,7 +88,6 @@ char	*get_next_line(int fd)
 	remainder = read_file(fd, buffer, remainder);
 	if (!remainder)
 		return (NULL);
-	 /*  printf("aqui line testing: %s\n", remainder);  */
 	line = get_line(remainder);
 	remainder = update_remainder(remainder);
 	return (line);

@@ -27,10 +27,3 @@ int main(void)
     close(fd);
     return (0);
 }
-
-/* gcc -o get_next_line main.c get_next_line.c -D BUFFER_SIZE=1024
-gcc -D BUFFER_SIZE=50 get_next_line.c -o gnl main.c
-
-cc main.c get_next_line.c get_next_line_utils.c -o test  
-
-./get_next_line   */ 
